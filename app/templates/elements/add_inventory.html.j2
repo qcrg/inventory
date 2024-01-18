@@ -1,0 +1,75 @@
+{% set ID = "add_inventory_window" %}
+
+<div class="modal fade"
+  id="{{ ID }}"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="{{ ID }}_label"
+  style="display: none;"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="{{ ID }}_label">New Location For Product</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p><form id="form_{{ ID }}"
+          onsubmit="add_inventory('{{ ID }}'); return false"
+        >
+          <div class="input-group mb-3">
+            <input class="form-control"
+              name="product_id"
+              type="text"
+              id="{{ ID }}_input_product_id"
+              value=""
+              readonly=""
+            />
+            <div class="invalid-feedback">Product is invalid</div>
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text">Location</span>
+            <select class="form-select"
+              name="location_id"
+              id="{{ ID }}_input_location_id"
+            >
+              <option selected="" value="-1"></option>
+            </select>
+            <div class="invalid-feedback">Location is invalid</div>
+          </div>
+          <div class="input-group">
+            <span class="input-group-text">Quantity</span>
+            <input class="form-control"
+              name="quantity"
+              type="text"
+              id="{{ ID }}_input_quantity"
+              value="0"
+              min="0"
+            />
+            <span class="input-group-text">pcs.</span>
+            <div class="invalid-feedback">Quantity is invalid</div>
+          </div>
+        </form></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit"
+          class="btn btn-primary"
+          id="{{ ID }}_add"
+          form="form_{{ ID }}"
+        >
+          <span class="pnd-default-label">Add</span>
+          <span class="pnd-wait-spinner" hidden="">
+            <span class="spinner-border spinner-border-sm"
+              aria-hidden="true"
+            ></span>
+            <span role="status">Loading...</span>
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <script>init_modal_inputs_clearer("{{ ID }}")</script>
+</div>

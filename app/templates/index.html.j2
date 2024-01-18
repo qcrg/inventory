@@ -1,0 +1,109 @@
+{% extends "base.html.j2" %}
+
+{% block html_base_head %}
+<script>
+  const LOCATIONS = new Map([
+    {% for loc in locations %}
+      [{{ loc.id }}, "{{ loc.name }}"],
+    {% endfor %}
+  ])
+  const LOCATION_NAMES = new Set([
+    {% for loc in locations %}
+      "{{ loc.name }}",
+    {% endfor %}
+  ])
+  const PRODUCTS = new Map([
+    {% for prod in products %}
+      [{{ prod.id }}, "{{ prod.name }}"],
+    {% endfor %}
+  ])
+  const PRODUCT_NAMES = new Set([
+    {% for prod in products %}
+      "{{ prod.name }}",
+    {% endfor %}
+  ])
+</script>
+{% endblock html_base_head %}
+
+{% block html_base_body %}
+<div class="min-vh-100 container pt-4">
+  <div class="row">
+    <div id="product_list" class="col">
+      {% for item in items %}
+        {{ item }}
+      {% endfor %}
+    </div>
+    <div class="col-sm-3">
+      <div class="sticky-top text-center" style="z-index: 990;">
+        <div id="block_add_new"
+          class="mb-3 pb-3 pt-3 bg-body-tertiary rounded"
+        >
+          <button class="btn btn-primary mb-2"
+            data-bs-toggle="modal"
+            data-bs-target="#add_product_window"
+            id="add_product_button"
+          >
+            Add product
+          </button>
+          <button class="btn btn-primary mb-2"
+            data-bs-toggle="modal"
+            data-bs-target="#add_location_window"
+            id="add_location_button"
+          >
+            Add location
+          </button>
+        </div>
+        <div id="block_search" class="px-3 py-3 bg-body-tertiary rounded">
+          <form id="form_search">
+            <input id="name" class="form-control mb-3" type="search"
+                placeholder="Product name" name="name">
+            <div class="input-group mb-3">
+              <span class="input-group-text">Order</span>
+              <select class="form-select" id="order" name="order">
+                <option selected="" value="0">none</option>
+                <option value="1">price</option>
+                <option value="2">quantity</option>
+              </select>
+            </div>
+            <label for="filter-locations-block" hidden=""><h5>Locations</h5></label>
+            <div id="filter-locations-block"
+              class="rounded text-start bg-secondary p-2 mb-3 bg-body"
+              hidden=""
+            >
+              <ul class="list-group list-group-flush overflow-auto"
+                style="max-height: 20svh; min-height: 200px"
+              >
+                {% if locations %}
+                  {% for location in locations %}
+                    <li class="list-group-item" data-pnd-id="{{ location.id }}">
+                      <div id="location-{{ location.id }}" class="form-check">
+                        <input type="checkbox" class="form-check-input"
+                          id="input-location-{{ location.id }}"
+                        >
+                        <label class="form-check-label" for="input-location-{{ location.id }}">{{ location.name }}</label>
+                      </div>
+                    </li>
+                  {% endfor %}
+                {% else %}
+                  <li class="list-group-item disabled" aria-disabled="true" data-pnd-id="none">None</li>
+                {% endif %}
+              </ul>
+            </div>
+            <input type="hidden" id="locations" name="locations" />
+            <button id="search-submit" class="btn btn-outline-light" type="submit">Search</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="static/js/search_forms_setter.js"></script>
+<script src="static/js/inventory_updater.js"></script>
+<script src="static/js/inventory_actions.js"></script>
+<script src="static/js/input_clearer.js"></script>
+<script src="static/js/adders.js"></script>
+{% include "elements/add_location.html.j2" %}
+{% include "elements/add_product.html.j2" %}
+{% include "elements/add_inventory.html.j2" %}
+{% endblock html_base_body %}

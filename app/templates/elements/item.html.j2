@@ -1,0 +1,101 @@
+{# 
+  item {
+    id: int,
+    name: str,
+    desc: str,
+    price: float,
+    inventory: [
+      {
+        id: int,
+        location_name: str, 
+        quantity: int
+      }
+    ]
+  }
+#}
+
+<div id="product-{{ item.id }}" class="card mb-4">
+  <div class="card-body">
+    <div class="float-end">
+      <span class="fw-bold">{{ item.price }} $</span>
+    </div>
+    <h4 class="card-title fw-bold">{{ item.name }}</h4>
+    <p class="card-text">{{ item.desc }}</p>
+    <div class="float-end">
+      <button class="btn btn-primary"
+        data-bs-toggle="modal"
+        data-bs-target="#add_inventory_window"
+        id="add_inventory_button"
+        onclick="preprocess_inventory_add({{ item.id }})"
+      >
+        Add to the warehouse
+      </button>
+    </div>
+  </div>
+  <ul class="list-group list-group-flush ml-3">
+    {% for record in item.inventory %}
+      <li class="d-flex align-items-center list-group-item ml-100"
+        id="inventory_{{ record.id }}" 
+        data-pnd-id="{{ record.id }}"
+        data-pnd-location-id="{{ record.location_id }}"
+      >
+        {# <div class="mw-100">
+          <span class="pnd_inventory_quantity" data-pnd-id="{{ record.id }}">{{ record.quantity }}</span> pcs. ::
+          <span>{{ record.location_name }}</span>
+        </div> #}
+        <div class="input-group input-group-sm me-1"
+          style="min-width: 150px; max-width: 150px;"
+        >
+          <input class="form-control pnd_inventory_quantity"
+            type="text"
+            value="{{ record.quantity }}"
+            readonly=""
+          />
+          <span class="input-group-text">pcs</span>
+        </div>
+        <div class="pnd_block_inventory_change
+            d-flex align-items-center
+            d-none"
+        >
+          <div class="input-group input-group-sm me-1"
+            style="min-width: 150px; max-width: 150px;"
+          >
+            <input class="form-control pnd_inventory_quantity_change"
+              type="text"
+            />
+            <span class="input-group-text">pcs</span>
+          </div>
+          <button class="btn btn-sm btn-success me-2"
+            onclick="update_inventory('{{ record.id }}')"
+          >✔</button>
+          <button class="btn btn-sm btn-danger me-2"
+            onclick="switch_update_inventory_block('{{ record.id }}')"
+          >🗙</button>
+        </div>
+        <span class="text-end w-100 ps-1 pe-2">{{ record.location_name }}</span>
+        <div class="dropend">
+          <button class="btn btn-sm btn-outline-secondary
+              dropdown-toggle align-items-center d-flex"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <img src="static/images/cogwheel.svg" />
+          </button>
+          <ul class="dropdown-menu">
+            <li><h6 class="dropdown-header">Actions</h6></li>
+            <li>
+              <button class="dropdown-item"
+                onclick="switch_update_inventory_block('{{ record.id }}')"
+              >
+                Change
+              </button>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li><button class="dropdown-item text-danger" onclick="remove_inventory('{{ record.id }}')">Remove</button></li>
+          </ul>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+</div>

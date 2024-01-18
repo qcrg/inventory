@@ -1,0 +1,52 @@
+{% set ID = "add_location_window" %}
+
+<div class="modal fade"
+  id="{{ ID }}"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="{{ ID }}_label"
+  style="display: none;"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="{{ ID }}_label">New Location</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p><form id="form_{{ ID }}" onsubmit="add_location('{{ ID }}'); return false">
+          <div class="input-group has-validation">
+            <span class="input-group-text">Name</span>
+            <input class="form-control"
+              type="text"
+              name="name"
+              minlength="1"
+              maxlength="50"
+              id="{{ ID }}_input_name"
+            />
+            <div class="invalid-feedback">Name is invalid</div>
+          </div>
+        </form></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit"
+          class="btn btn-primary"
+          id="{{ ID }}_add"
+          form="form_{{ ID }}"
+        >
+          <span class="pnd-default-label">Add</span>
+          <span class="pnd-wait-spinner" hidden="">
+            <span class="spinner-border spinner-border-sm"
+              aria-hidden="true"
+            ></span>
+            <span role="status">Loading...</span>
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <script>init_modal_inputs_clearer("{{ ID }}")</script>
+</div>
